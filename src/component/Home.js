@@ -17,7 +17,7 @@ const Home = () => {
           <div className="carousel-item active">
             <img src="img/image-1.jpeg" className="d-block w-100" alt="..." />
             <div className="carousel-caption">
-              <h5>Kamus impian</h5>
+              <h5>Kampus impian</h5>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime, nulla, tempore. Deserunt excepturi quas vero.</p>
                 <p><a href="#" className="btn btn-primary mt-3">Learn More</a></p>
             </div>

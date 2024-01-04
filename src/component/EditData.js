@@ -9,6 +9,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const EditData = () => {
 
     const [nama, setNama] = useState("");
+    const [id_student, setId] = useState("");
     const [nik, setNik] = useState("");
     const [alamat, setAlamat] = useState("");
     const [telepon, setTelepon] = useState("");
@@ -26,18 +27,19 @@ const EditData = () => {
     const updateUser = async (e) => {
         e.preventDefault();
         try {
-            await axios.post(`http://192.168.209.129:8003/servis/edit-student/${id}`, {
-                nama,
-                nik,
-                alamat,
-                telepon,
-                tanggal_lahir,
-                tahun_masuk,
-                semester_masuk
+            await axios.post(`http://192.168.209.129:8003/servis/edit-student`, {
+                id: id_student,
+                nama: nama,
+                nik: nik,
+                alamat: alamat,
+                telepon: telepon,
+                tanggal_lahir: tanggal_lahir,
+                tahun_masuk: tahun_masuk,
+                semester_masuk: semester_masuk
             },{
                 headers: {
-                  'Authorization': 'Bearer 101-token',
-                  'Access-Control-Allow-Origin': 'http://localhost:8080',
+                    'Authorization': 'Bearer 101-token',
+                    'Access-Control-Allow-Origin': 'http://localhost:8080',
                 },
               },
             toast.success('Data updated!', {
@@ -52,6 +54,7 @@ const EditData = () => {
               })
             );
             navigate('/data');
+            console.log(id_student);
         } catch (error) {
             console.log(error);
         }
@@ -66,6 +69,7 @@ const EditData = () => {
                 },
             });
             const studentData = response.data.students[0];
+            setId(studentData.id);
             setNama(studentData.nama);
             setNik(studentData.nik);
             setAlamat(studentData.alamat);
@@ -96,6 +100,10 @@ const EditData = () => {
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                 <Form.Label>Nama</Form.Label>
                 <Form.Control type="text" value={nama} onChange={ (e) => setNama(e.target.value) } />
+                <Form.Control type="hidden" value={id_student} onChange={ (e) => setId(e.target.value) } />
+            </Form.Group>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+                <Form.Control type="hidden" value={id_student} onChange={ (e) => setId(e.target.value) } />
             </Form.Group>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
                 <Form.Label>NIK</Form.Label>

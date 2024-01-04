@@ -37,10 +37,16 @@ const [searchTerm, setSearchTerm] = useState('');
 
   const deleteUser = async (id) => {
     try {
-      await axios.post(`http://192.168.209.129:8003/servis/delete-student/${id}`, {
+      await axios.post(`http://192.168.209.129:8003/servis/delete-student`, {
+        id: id,
+      },
+      {
         headers: {
           'Authorization': 'Bearer 101-token',
         },
+        body: {
+          'id': {id}
+        }
       });
       getUser();
       toast.success('Delete success!', {
@@ -111,7 +117,7 @@ const [searchTerm, setSearchTerm] = useState('');
         </Container>
         </Navbar>
         <Card className="parallax-card">
-        <Card.Img className="parallax-image" variant="top" src="img/home-1-data.jpg" />
+        <Card.Img className="parallax-image" variant="top" src="img/image-1-data.jpg" />
         <Card.Body>
           <Card.Text>
             <div className="row">
@@ -138,7 +144,7 @@ const [searchTerm, setSearchTerm] = useState('');
                         <th>Alamat</th>
                         <th>Telepon</th>
                         <th>Tgl Lahir</th>
-                        <th>Semetser Masuk</th>
+                        <th>Semester Masuk</th>
                         <th>Tahun masuk</th>
                         <th>Actions</th>
                     </tr>
@@ -149,6 +155,7 @@ const [searchTerm, setSearchTerm] = useState('');
                         <td>{indexItem + index + 1}</td>
                         <td>{user.nama}</td>
                         <td>{user.nik}</td>
+                        <td>{user.alamat}</td>
                         <td>{user.telepon}</td>
                         <td>{user.tanggal_lahir}</td>
                         <td>{user.semester_masuk}</td>
