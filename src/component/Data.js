@@ -11,7 +11,7 @@ const Data = () => {
 
 const [users, setUser] = useState([]);
 const [currentPage, setCurrentPage] = useState(1);
-const [itemsPerPage] = useState(10);
+const [itemsPerPage] = useState(2);
 const [filteredData, setFilteredData] = useState([]);
 const [searchTerm, setSearchTerm] = useState('');
 
@@ -26,7 +26,7 @@ const [searchTerm, setSearchTerm] = useState('');
             'Authorization': 'Bearer 101-token',
           },    
       });
-      setUser(response.data);
+      setUser(response.data.students);
       setFilteredData(response.data.students);
       console.log(response.data.students);
     } catch (error) {
@@ -58,18 +58,22 @@ const [searchTerm, setSearchTerm] = useState('');
   
     setSearchTerm(term);
     if (term.trim() === "") {
-      setFilteredData(users);
-    } else {
-      const filtered = users.filter(
-        user =>
-          user.username.toLowerCase().includes(term.toLowerCase()) ||
-          user.name.toLowerCase().includes(term.toLowerCase()) ||
-          user.email.toLowerCase().includes(term.toLowerCase())
-      );
-      setFilteredData(filtered);
-    }
-    setCurrentPage(1);
-  };
+        setFilteredData(users);
+      } else {
+        if (Array.isArray(users)) {
+          const filtered = users.filter(
+            user =>
+              user.nama.toLowerCase().includes(term.toLowerCase()) ||
+              user.nik.toLowerCase().includes(term.toLowerCase())
+          );
+          setFilteredData(filtered);
+        } else {
+          console.error("'users' is not an array.");
+        }
+      }
+    
+      setCurrentPage(1);
+    };
 
   
 
@@ -78,9 +82,9 @@ const [searchTerm, setSearchTerm] = useState('');
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 //   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem); 
-const currentItems = Array.isArray(filteredData)
-? filteredData.slice(indexOfFirstItem, indexOfLastItem)
-: []; 
+  const currentItems = Array.isArray(filteredData)
+  ? filteredData.slice(indexOfFirstItem, indexOfLastItem)
+  : []; 
 
   const onPageChange = pageNumber => {
     setCurrentPage(pageNumber);
