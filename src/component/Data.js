@@ -21,10 +21,11 @@ const [searchTerm, setSearchTerm] = useState('');
 
   const getUser = async () => {
     try {
-      const response = await axios.get("http://192.168.209.129:8003/servis/students", {
+      const response = await axios.get("http://192.168.209.129:8003/servis/students",  {
         headers: {
-            'Authorization': 'Bearer 101-token',
-          },    
+          'Authorization': 'Bearer 101-token',
+          'Access-Control-Allow-Origin': '*',
+        },
       });
       setUser(response.data.students);
       setFilteredData(response.data.students);
@@ -36,7 +37,11 @@ const [searchTerm, setSearchTerm] = useState('');
 
   const deleteUser = async (id) => {
     try {
-      await axios.delete(`http://192.168.209.129:8003/servis/students/${id}`);
+      await axios.post(`http://192.168.209.129:8003/servis/delete-student/${id}`, {
+        headers: {
+          'Authorization': 'Bearer 101-token',
+        },
+      });
       getUser();
       toast.success('Delete success!', {
         position: "top-right",
@@ -54,7 +59,6 @@ const [searchTerm, setSearchTerm] = useState('');
   }
 
   const handleSearch = term => {
-    console.log("Searching for:", term);
   
     setSearchTerm(term);
     if (term.trim() === "") {
@@ -68,7 +72,7 @@ const [searchTerm, setSearchTerm] = useState('');
           );
           setFilteredData(filtered);
         } else {
-          console.error("'users' is not an array.");
+          console.error("'users' bukan array");
         }
       }
     
@@ -80,8 +84,7 @@ const [searchTerm, setSearchTerm] = useState('');
   const lastPage = Math.ceil(filteredData.length / itemsPerPage);
 
   const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-//   const currentItems = filteredData.slice(indexOfFirstItem, indexOfLastItem); 
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage; 
   const currentItems = Array.isArray(filteredData)
   ? filteredData.slice(indexOfFirstItem, indexOfLastItem)
   : []; 
@@ -89,6 +92,9 @@ const [searchTerm, setSearchTerm] = useState('');
   const onPageChange = pageNumber => {
     setCurrentPage(pageNumber);
   };
+
+
+  const indexItem = (currentPage - 1) * itemsPerPage;
 
   return (
     <div>
@@ -140,7 +146,7 @@ const [searchTerm, setSearchTerm] = useState('');
                 <tbody>
                     {currentItems.map((user, index) => (
                     <tr key={user.id}>
-                        <td>{index + 1}</td>
+                        <td>{indexItem + index + 1}</td>
                         <td>{user.nama}</td>
                         <td>{user.nik}</td>
                         <td>{user.telepon}</td>
@@ -148,7 +154,7 @@ const [searchTerm, setSearchTerm] = useState('');
                         <td>{user.semester_masuk}</td>
                         <td>{user.tahun_masuk}</td>
                         <td>
-                            <Button as={Link} to={`/edit/${user.id}`} variant="success" size="sm">edit</Button>{' '}
+                            <Button as={Link} to={`/edit/${indexItem + index + 1}`} variant="success" size="sm">edit</Button>{' '}
                             <Button variant="danger" size="sm" onClick={() => deleteUser(user.id)}>
                                 delete
                             </Button>{' '}
